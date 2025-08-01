@@ -10,11 +10,11 @@ import plotly.express as px # For interactive plots
 st.set_page_config(page_title="EV Forecast", layout="wide")
 
 # === Load model ===
-# Ensure 'forecasting_ev_model.pkl' and 'preprocessed_ev_data.csv' are in the same directory as app.py
+# Load model from parent directory
 try:
-    model = joblib.load('forecasting_ev_model .pkl')
+    model = joblib.load('./forecasting_ev_model.pkl')
 except FileNotFoundError:
-    st.error("Error: 'forecasting_ev_model.pkl' not found. Please ensure the model file is in the same directory.")
+    st.error("Error: 'forecasting_ev_model.pkl' not found. Please ensure the model file is in the parent directory.")
     st.stop()
 
 # === Styling ===
@@ -48,7 +48,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Image
-# Ensure 'ev-car-factory.jpg' is in the same directory as app.py
+# Load image from parent directory
 try:
     st.image("ev-car-factory.jpg", use_container_width=True)
 except FileNotFoundError:
@@ -67,11 +67,11 @@ st.markdown("""
 @st.cache_data
 def load_data():
     try:
-        df = pd.read_csv("preprocessed_ev_data .csv")
+        df = pd.read_csv("preprocessed_ev_data.csv")
         df['Date'] = pd.to_datetime(df['Date'])
         return df
     except FileNotFoundError:
-        st.error("Error: 'preprocessed_ev_data.csv' not found. Please ensure the data file is in the same directory.")
+        st.error("Error: 'preprocessed_ev_data .csv' not found. Please ensure the data file is in the parent directory.")
         st.stop()
 
 df = load_data()
@@ -180,13 +180,13 @@ st.subheader(f"📈 Cumulative EV Forecast for {county} County")
 fig_single = px.line(combined_single_county, x='Date', y='Cumulative EV', color='Source',
                      title=f"Cumulative EV Trend - {county} ({forecast_years} Years Forecast)",
                      labels={'Cumulative EV': 'Cumulative EV Count'},
-                     color_discrete_map={'Historical': 'black', 'Forecast': 'black'}) # Custom colors
+                     color_discrete_map={'Historical': 'blue', 'Forecast': 'red'}) # Custom colors
 fig_single.update_layout(
-    plot_bgcolor='#1c1c1c', # Dark background for plot area
-    paper_bgcolor='#1c1c1c', # Dark background for the entire figure
+    plot_bgcolor='black', # Dark background for plot area
+    paper_bgcolor='black', # Dark background for the entire figure
     font_color='black',
-    title_font_color='black',
-    legend_title_font_color='blue'
+    title_font_color='white',
+    legend_title_font_color='black'
 )
 fig_single.update_xaxes(showgrid=True, gridwidth=1, gridcolor='rgba(255,255,255,0.2)')
 fig_single.update_yaxes(showgrid=True, gridwidth=1, gridcolor='rgba(255,255,255,0.2)')
